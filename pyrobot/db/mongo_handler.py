@@ -5,7 +5,6 @@ from os import getenv
 class DBHandler:
     def __init__(self):
         self.client = MongoClient(getenv("uri"), server_api=ServerApi('1'))
-        print(type(getenv("db_name")), getenv("db_name"))
         self.db = self.client[getenv("db_name")]
 
     def check_connection(self):
