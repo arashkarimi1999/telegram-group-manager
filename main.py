@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv(dotenv_path="config.env")
 from pyrobot import bot
 import logging
 
