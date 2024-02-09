@@ -1,0 +1,14 @@
+
+# telegram account
+api_id=
+api_hash=
+bot_token=
+
+# mongodb
+uri=
+db_name=
+
+# proxy (leave empty if you don't use)
+scheme=
+hostname=
+port=
