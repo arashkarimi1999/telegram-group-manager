@@ -7,11 +7,16 @@ load_dotenv()
 api_id = int(getenv("api_id"))
 api_hash = getenv("api_hash")
 bot_token = getenv("bot_token")
-proxy = {
-    "scheme": "socks5",
-    "hostname": "127.0.0.1",
-    "port": 10808
-}
+
+if getenv("scheme"):
+    proxy = {
+        "scheme": getenv("scheme"),
+        "hostname": getenv("hostname"),
+        "port": int(getenv("port"))
+    }
+else:
+    proxy = None
+
 
 bot = Client(
     "groupe_manager",
