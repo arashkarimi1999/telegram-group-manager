@@ -1,22 +1,23 @@
 from pyrogram import Client, filters
 from pyrobot.plugins.helper import is_admin
+from pyrobot import bot
 
 
-@Client.on_message(filters.command('bot') & filters.group)
+@bot.on_message(filters.command('bot') & filters.group)
 async def bot_message(bot, update):
     """Dummy function to check admins or if the bot is online."""
     if await is_admin(bot, update):
         await bot.send_message(chat_id=update.chat.id, text="yes my master", reply_to_message_id=update.id)
 
 
-@Client.on_message(filters.command('delete') & filters.group & filters.reply)
+@bot.on_message(filters.command('delete') & filters.group & filters.reply)
 async def delete_message(bot, update):
     """Deletes a massage."""
     if await is_admin(bot, update):
         await bot.delete_messages(chat_id=update.chat.id, message_ids=[update.reply_to_message.id, update.id])
 
 
-@Client.on_message(filters.command('tag') & filters.group)
+@bot.on_message(filters.command('tag') & filters.group)
 async def tag(bot, update):
     """Mentions n recent participants in the group."""
     if await is_admin(bot, update):
