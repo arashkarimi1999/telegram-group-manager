@@ -1,3 +1,12 @@
+from pyrogram import filters
+from pyrogram.types import Message
+
+
+def active_match_filter(active_matches):
+    async def func(flt, _, m: Message):
+        return m.chat.id in flt.data
+
+    return filters.create(func, data=active_matches)
 
 
 async def is_admin(bot, update):
