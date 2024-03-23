@@ -67,8 +67,10 @@ class EliminationMatch:
     
     def block_chat(self):
         self.chat_blocked = True
+        self.players_only = False
 
     def make_players_only(self):
+        self.chat_blocked = False
         self.players_only = True
 
     def unblock_chat(self):
@@ -87,6 +89,12 @@ class EliminationMatch:
                 score = self.sub_score(player["user_id"])
                 if not score:
                     yield player
+    
+    def clear_confirm(self):
+        for player in self.get_all_players():
+            player['confirm'] = False
+            user_id = player['user_id']
+            self.players[user_id] = player
 
     def finish(self):
         self.players.clear()
@@ -242,10 +250,12 @@ async def next(bot, update):
                 text += f"[{player['name']}](tg://user?id={player['user_id']}) ELEMINATED!\n"
                 match.remove_player(player['user_id'])
 
-            await bot.send_message(
-                chat_id=update.chat.id,
-                text = text
-            )
+                await bot.send_message(
+                    chat_id=update.chat.id,
+                    text = text
+                )
+
+            match.clear_confirm()
 
 
 @bot.on_message(active_match_filter(active_matches) & filters.command('add_admin') & filters.group & filters.reply)
