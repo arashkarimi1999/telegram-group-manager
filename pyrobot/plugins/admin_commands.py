@@ -37,7 +37,11 @@ async def tag(bot, update):
                 unique_users.append(message.from_user)
                 if len(unique_users) >= num_to_tag:
                     break
+        
+        chunk_size = 4
 
-        mention_list = ', '.join([f"[{user.first_name}](tg://user?id={user.id})" for user in unique_users])
-        await bot.send_message(chat_id=update.chat.id, text=f"Hello there {mention_list}!")
+        user_chunks = [unique_users[i:i + chunk_size] for i in range(0, len(unique_users), chunk_size)]
+        for chunk in user_chunks:
+            mention_list = ', '.join([f"[{user.first_name}](tg://user?id={user.id})" for user in chunk])
+            await bot.send_message(chat_id=update.chat.id, text=f"Hello there {mention_list}!")
 
