@@ -132,15 +132,25 @@ async def start_match(bot, update):
 admin:{update.reply_to_message.from_user.mention()}
 list of command:
     add: to add a player to the match
+
     +: to confirm a correct answer
+
     -: to subtract one score from a player
+
     results: to see the remaining players
+
     block: to block messaging for everyone
+
     players_only: to block messaging for everyone except match admins and players
+
     open: to open messaging for everyone
+
     next: to check this round and go to next
+
     /add_admin: to add an admin to the match (only group admins)
+
     /remove_admin: to remove an admin from the match (only group admins)
+
     /finish_match: to finish the match (only group admins)"""
         await bot.send_message(
             chat_id=update.chat.id,
