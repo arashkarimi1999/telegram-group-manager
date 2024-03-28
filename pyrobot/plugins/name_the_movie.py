@@ -1,4 +1,5 @@
 import re
+from os import getenv
 from pyrogram import Client, filters
 
 from pyrobot.plugins.helper import is_admin, active_match_filter
@@ -77,6 +78,9 @@ class NameTheMovie:
 @bot.on_message(filters.command('start_name_the_movie') & filters.group & filters.reply)
 async def start_match(bot, update):
     """A command to start name the movie match."""
+    if getenv("debug") == 'True':
+        print("start_name_the_movie")
+
     if await is_admin(bot, update):
         
         match = NameTheMovie(update.chat.id)
@@ -107,6 +111,9 @@ list of command:
 @bot.on_message(active_match_filter(active_games) & filters.regex(re.compile(r'^\+\s*(\d+)?$', re.IGNORECASE)) & filters.group & filters.reply)
 async def add_score(bot, update):
     """A command to add score to a player."""
+    if getenv("debug") == 'True':
+        print("+")
+
     match = active_games.get(update.chat.id)
     if match:
         if match.is_admin(update.from_user.id):
@@ -132,6 +139,9 @@ async def add_score(bot, update):
 @bot.on_message(active_match_filter(active_games) & filters.regex(re.compile(r'^-\s*(\d+)?$', re.IGNORECASE)) & filters.group & filters.reply)
 async def sub_score(bot, update):
     """A command to subtract score from a player."""
+    if getenv("debug") == 'True':
+        print("-")
+
     match = active_games.get(update.chat.id)
     if match:
         if match.is_admin(update.from_user.id):
@@ -156,6 +166,9 @@ async def sub_score(bot, update):
 @bot.on_message(active_match_filter(active_games) & filters.regex(re.compile(r'results', re.IGNORECASE)) & filters.group)
 async def show_results(bot, update):
     """A command to see the results."""
+    if getenv("debug") == 'True':
+        print("results")
+
     match = active_games.get(update.chat.id)
     if match:
         if match.is_admin(update.from_user.id):
@@ -181,6 +194,9 @@ async def show_results(bot, update):
 @bot.on_message(active_match_filter(active_games) & filters.regex(re.compile(r'block', re.IGNORECASE)) & filters.group)
 async def block_chat(bot, update):
     """Block messaging for everyone except match admins."""
+    if getenv("debug") == 'True':
+        print("block")
+
     match = active_games.get(update.chat.id)
     if match:
         if match.is_admin(update.from_user.id):
@@ -190,6 +206,9 @@ async def block_chat(bot, update):
 @bot.on_message(active_match_filter(active_games) & filters.regex(re.compile(r'open', re.IGNORECASE)) & filters.group)
 async def unblock_chat(bot, update):
     """Unblock messaging for everyone."""
+    if getenv("debug") == 'True':
+        print("open")
+
     match = active_games.get(update.chat.id)
     if match:
         if match.is_admin(update.from_user.id):
@@ -199,6 +218,9 @@ async def unblock_chat(bot, update):
 @bot.on_message(active_match_filter(active_games) & filters.command('add_admin') & filters.group & filters.reply)
 async def add_admin(bot, update):
     """Add a user to the match admin list."""
+    if getenv("debug") == 'True':
+        print("add_admin")
+
     match = active_games.get(update.chat.id)
     if await is_admin(bot, update):
         if match:
@@ -221,6 +243,9 @@ async def add_admin(bot, update):
 @bot.on_message(active_match_filter(active_games) & filters.command('remove_admin') & filters.group & filters.reply)
 async def remove_admin(bot, update):
     """Remove a user from the match admin list."""
+    if getenv("debug") == 'True':
+        print("remove_admin")
+
     match = active_games.get(update.chat.id)
     if await is_admin(bot, update):
         if match:
@@ -246,6 +271,9 @@ async def remove_admin(bot, update):
 @bot.on_message(active_match_filter(active_games) & filters.command('finish_match') & filters.group)
 async def finish_match(bot, update):
     """Finish the match."""
+    if getenv("debug") == 'True':
+        print("finish_match")
+
     match = active_games.get(update.chat.id)
     if await is_admin(bot, update):
         if match:
@@ -265,6 +293,9 @@ async def finish_match(bot, update):
 @bot.on_message(active_match_filter(active_games) & filters.all & filters.group)
 async def handle_all_messages(bot, update):
     """handle all messages."""
+    if getenv("debug") == 'True':
+        print("handle_all_messages")
+
     match = active_games.get(update.chat.id)
     if match:
         if match.is_chat_blocked() and not match.is_admin(update.from_user.id):

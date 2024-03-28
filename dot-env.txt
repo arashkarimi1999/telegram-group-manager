@@ -12,3 +12,6 @@ db_name=
 scheme=
 hostname=
 port=
+
+# to test and debuging
+debug=

@@ -1,10 +1,14 @@
 from pyrogram import Client, filters
 from pyrobot import bot
+from os import getenv
 
 
 @bot.on_message(filters.command('start'))
 async def bot_message(bot, update):
     """Start the bot."""
+    if getenv("debug") == 'True':
+        print("start")
+
     await bot.send_message(
         chat_id=update.chat.id,
         text="Hello there!\nI am Mr.Alderson, a group manager bot. I can help \
@@ -15,6 +19,9 @@ you in group managing and holding competitions. Just add me to your group and\
 @bot.on_message(filters.command('help'))
 async def delete_message(bot, update):
     """Get the command list."""
+    if getenv("debug") == 'True':
+        print("help")
+
     await bot.send_message(
         chat_id=update.chat.id,
         text="""here is a list of commands:
