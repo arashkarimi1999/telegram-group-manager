@@ -143,6 +143,70 @@ list of command:
             reply_to_message_id=update.id)
 
 
+@bot.on_message(active_match_filter(active_matches) & filters.command('add_admin') & filters.group & filters.reply)
+async def add_admin(bot, update):
+    """Add a user to the match admin list."""
+    match = active_matches.get(update.chat.id)
+    if await is_admin(bot, update):
+        if match:
+            match.add_admin(
+                user_id=update.reply_to_message.from_user.id,
+                name=update.reply_to_message.from_user.first_name
+            )
+            text = f"[{update.reply_to_message.from_user.first_name}](tg://user?id={update.reply_to_message.from_user.id}) added to the match admins."
+            await bot.send_message(
+                chat_id=update.chat.id,
+                text=text,
+                reply_to_message_id=update.id)
+        else:
+            await bot.send_message(
+                chat_id=update.chat.id,
+                text="No active match found.",
+                reply_to_message_id=update.id)
+
+
+@bot.on_message(active_match_filter(active_matches) & filters.command('remove_admin') & filters.group & filters.reply)
+async def remove_admin(bot, update):
+    """Remove a user from the match admin list."""
+    match = active_matches.get(update.chat.id)
+    if await is_admin(bot, update):
+        if match:
+            if match.is_admin(update.reply_to_message.from_user.id):
+                match.remove_admin(user_id=update.reply_to_message.from_user.id)
+                text = f"[{update.reply_to_message.from_user.first_name}](tg://user?id={update.reply_to_message.from_user.id}) removed from the match admins."
+                await bot.send_message(
+                    chat_id=update.chat.id,
+                    text=text,
+                    reply_to_message_id=update.id)
+            else:
+                await bot.send_message(
+                    chat_id=update.chat.id,
+                    text="User is not an admin.",
+                    reply_to_message_id=update.id)
+        else:
+            await bot.send_message(
+                chat_id=update.chat.id,
+                text="No active match found.",
+                reply_to_message_id=update.id)
+
+
+@bot.on_message(active_match_filter(active_matches) & filters.regex(re.compile(r'remove', re.IGNORECASE)) & filters.group & filters.reply)
+async def remove_player(bot, update):
+    """A command to remove a player from the elimination match."""
+    match = active_matches.get(update.chat.id)
+    if match:
+        if match.is_admin(update.from_user.id):
+            if match.is_player(update.reply_to_message.from_user.id):
+                match.remove_player(
+                    update.reply_to_message.from_user.id
+                )
+                await bot.send_message(
+                    chat_id=update.chat.id,
+                    text="Player removed successfully.",
+                    reply_to_message_id=update.id
+                )
+
+
 @bot.on_message(active_match_filter(active_matches) & filters.regex(re.compile(r'add', re.IGNORECASE)) & filters.group & filters.reply)
 async def add_player(bot, update):
     """A command to add a player to the elimination match."""
@@ -256,53 +320,6 @@ async def next(bot, update):
                 )
 
             match.clear_confirm()
-
-
-@bot.on_message(active_match_filter(active_matches) & filters.command('add_admin') & filters.group & filters.reply)
-async def add_admin(bot, update):
-    """Add a user to the match admin list."""
-    match = active_matches.get(update.chat.id)
-    if await is_admin(bot, update):
-        if match:
-            match.add_admin(
-                user_id=update.reply_to_message.from_user.id,
-                name=update.reply_to_message.from_user.first_name
-            )
-            text = f"[{update.reply_to_message.from_user.first_name}](tg://user?id={update.reply_to_message.from_user.id}) added to the match admins."
-            await bot.send_message(
-                chat_id=update.chat.id,
-                text=text,
-                reply_to_message_id=update.id)
-        else:
-            await bot.send_message(
-                chat_id=update.chat.id,
-                text="No active match found.",
-                reply_to_message_id=update.id)
-
-
-@bot.on_message(active_match_filter(active_matches) & filters.command('remove_admin') & filters.group & filters.reply)
-async def remove_admin(bot, update):
-    """Remove a user from the match admin list."""
-    match = active_matches.get(update.chat.id)
-    if await is_admin(bot, update):
-        if match:
-            if match.is_admin(update.reply_to_message.from_user.id):
-                match.remove_admin(user_id=update.reply_to_message.from_user.id)
-                text = f"[{update.reply_to_message.from_user.first_name}](tg://user?id={update.reply_to_message.from_user.id}) removed from the match admins."
-                await bot.send_message(
-                    chat_id=update.chat.id,
-                    text=text,
-                    reply_to_message_id=update.id)
-            else:
-                await bot.send_message(
-                    chat_id=update.chat.id,
-                    text="User is not an admin.",
-                    reply_to_message_id=update.id)
-        else:
-            await bot.send_message(
-                chat_id=update.chat.id,
-                text="No active match found.",
-                reply_to_message_id=update.id)
 
 
 @bot.on_message(active_match_filter(active_matches) & filters.command('finish_match') & filters.group)
