@@ -1,6 +1,7 @@
 import re
 from os import getenv
 from pyrogram import Client, filters
+from pyrogram.types import User
 
 from pyrobot.plugins.helper import is_admin, active_match_filter
 # from pyrobot.db.mongo_handler import mongo
@@ -128,7 +129,7 @@ async def start_match(bot, update):
         )
         
         text = f"""elimination match started.
-admin:[{update.reply_to_message.from_user.first_name}](tg://user?id={update.reply_to_message.from_user.id})
+admin:{update.reply_to_message.from_user.mention()}
 list of command:
     add: to add a player to the match
     +: to confirm a correct answer
@@ -160,7 +161,7 @@ async def add_admin(bot, update):
                 user_id=update.reply_to_message.from_user.id,
                 name=update.reply_to_message.from_user.first_name
             )
-            text = f"[{update.reply_to_message.from_user.first_name}](tg://user?id={update.reply_to_message.from_user.id}) added to the match admins."
+            text = f"{update.reply_to_message.from_user.mention()} added to the match admins."
             await bot.send_message(
                 chat_id=update.chat.id,
                 text=text,
@@ -183,7 +184,7 @@ async def remove_admin(bot, update):
         if match:
             if match.is_admin(update.reply_to_message.from_user.id):
                 match.remove_admin(user_id=update.reply_to_message.from_user.id)
-                text = f"[{update.reply_to_message.from_user.first_name}](tg://user?id={update.reply_to_message.from_user.id}) removed from the match admins."
+                text = f"{update.reply_to_message.from_user.mention()} removed from the match admins."
                 await bot.send_message(
                     chat_id=update.chat.id,
                     text=text,
@@ -273,7 +274,7 @@ async def sub_score(bot, update):
                 if not score:
                     await bot.send_message(
                         chat_id=update.chat.id,
-                        text=f"[{update.reply_to_message.from_user.first_name}](tg://user?id={update.reply_to_message.from_user.id}) ELEMINATED!"
+                        text=f"{update.reply_to_message.from_user.mention()} ELEMINATED!"
                     )
                     match.remove_player(update.reply_to_message.from_user.id)
             else:

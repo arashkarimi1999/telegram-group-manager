@@ -92,7 +92,7 @@ async def start_match(bot, update):
         )
         
         text = f"""name the movie match started.
-admin:[{update.reply_to_message.from_user.first_name}](tg://user?id={update.reply_to_message.from_user.id})
+admin:{update.reply_to_message.from_user.mention()}
 list of command:
     + <num=10>: to add score to a player
     - <num=5>: to subtract score from a player
@@ -228,7 +228,7 @@ async def add_admin(bot, update):
                 user_id=update.reply_to_message.from_user.id,
                 name=update.reply_to_message.from_user.first_name
             )
-            text = f"[{update.reply_to_message.from_user.first_name}](tg://user?id={update.reply_to_message.from_user.id}) added to the match admins."
+            text = f"{update.reply_to_message.from_user.mention()} added to the match admins."
             await bot.send_message(
                 chat_id=update.chat.id,
                 text=text,
@@ -251,7 +251,7 @@ async def remove_admin(bot, update):
         if match:
             if match.is_admin(update.reply_to_message.from_user.id):
                 match.remove_admin(user_id=update.reply_to_message.from_user.id)
-                text = f"[{update.reply_to_message.from_user.first_name}](tg://user?id={update.reply_to_message.from_user.id}) removed from the match admins."
+                text = f"{update.reply_to_message.from_user.mention()} removed from the match admins."
                 await bot.send_message(
                     chat_id=update.chat.id,
                     text=text,
