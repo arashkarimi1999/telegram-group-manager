@@ -313,7 +313,8 @@ async def next(bot, update):
             for player in match.next():
                 text += f"[{player['name']}](tg://user?id={player['user_id']}) ELEMINATED!\n"
                 match.remove_player(player['user_id'])
-
+            
+            if text:
                 await bot.send_message(
                     chat_id=update.chat.id,
                     text = text
